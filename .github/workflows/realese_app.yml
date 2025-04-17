@@ -1,74 +1,64 @@
 name: "Build & Release"
-
 on:
   push:
     branches:
       - "main"
-
 jobs:
   flutter_test:
     name: Run Flutter Test
     runs-on: macos-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.27.1"
           channel: "stable"
-
       - name: Install Dependencies
         run: flutter pub get
-
       - name: Analyze Code
         run: flutter analyze
-
       - name: Run Tests
         run: flutter test
-
+  
   build_and_release:
     name: Build and Release
     needs: flutter_test
     runs-on: macos-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
       - name: Set Up Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
-
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.27.1
           channel: stable
-
       - name: Install Dependencies
         run: flutter pub get
       
-      - name: Get flutter version
+      - name: Ambil versi dari pubspec.yaml
         id: project_version
-        uses: its404/get-flutter-version@v1.0.0
-
+        run: |
+          VERSION=$(grep 'version:' pubspec.yaml | sed 's/version: //' | sed 's/+.*//')
+          BUILD_NUMBER=${{ github.run_number }}
+          echo "version_number=$VERSION" >> $GITHUB_OUTPUT
+          echo "build_number=$BUILD_NUMBER" >> $GITHUB_OUTPUT
+      
       - name: Build APK
         run: flutter build apk --release
-
       - name: Build AppBundle
         run: flutter build appbundle
-
       - name: Build IPA (No Code Signing)
         run: flutter build ipa --no-codesign
-
       - name: Compress iOS Build
         run: |
           cd build
           tar -czf ios_build.tar.gz ios
-
+      
       - name: Create or Update GitHub Release
         if: always()
         uses: ncipollo/release-action@v1
