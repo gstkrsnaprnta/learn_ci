@@ -1,0 +1,62 @@
+name: "Build & Release"
+on:
+    push: 
+        tags: 
+            - 'v*.*.*'
+
+jobs:
+    flutter_test:
+        name: Run Flutter Test
+        runs-on: macos-latest
+
+        steps:
+            - uses: actions/checkout@v4
+            - uses: subosito/flutter-action@v2
+              with:
+                channel : 'stable'
+                flutter-version: '3.27.1'
+
+            - name: Install Dependencies
+              run: flutter pub get
+
+            - name: Analyze Code
+              run: flutter analyze
+
+            - name: Run Test
+              run: flutter test
+
+
+    build_and_release:
+        name: Build and Release
+        needs: flutter_test
+        runs-on: macos-latest
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Set Up Java
+              uses: actions/setup-java@v4
+              with: 
+                distribution: 'temurin'
+                java-version: '17'
+
+            - name: Set Up Flutter
+              uses: subosito/flutter-action@v2
+              with:
+                flutter-version: '3.27.1'
+                channel: 'stable'
+
+            - name: Build APK
+              run: flutter build apk
+
+            - name: Push to Release
+              uses: nipollo/release-action@v1
+              with:
+                artifacts: build/app
+
+            
+
+
+            
+            

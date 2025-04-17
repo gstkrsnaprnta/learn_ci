@@ -13,17 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup flutter
-        uses: subosito/flutter-action@v2
+      - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
-      - name: Install dependencies
-        run: flutter pub get
+      - run: flutter pub get
         
       - run: flutter test
 
-      - name: Build APK
-        run: flutter build apk
-      
+      - run: flutter analyze      
       
