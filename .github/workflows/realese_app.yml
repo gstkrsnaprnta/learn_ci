@@ -23,7 +23,7 @@ jobs:
   build_and_release:
     name: Build and Release
     needs: flutter_test
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -73,10 +73,25 @@ jobs:
           tag: v${{ steps.project_version.outputs.version_number }}+${{ steps.project_version.outputs.build_number }}
           token: ${{ secrets.TOKEN }}
 
-      - name: Upload apk to Firebase distribution
+  upload_to_firebase:
+    name: Upload To Firebase
+    needs: build_and_release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Unduh Artefak
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/
+
+      - name: Unggah APK ke Firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
         with:
           appId: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_TOKEN }}
           groups: all_tester
           file: build/app/outputs/flutter-apk/app-release.apk
+
