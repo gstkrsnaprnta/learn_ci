@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "38481236425",
+    "project_id": "learn-ci-4b83f",
+    "storage_bucket": "learn-ci-4b83f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38481236425:android:2abf98e11af49cc5ce5818",
+        "android_client_info": {
+          "package_name": "com.example.learn_ci"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs2MfvFuVJywk8jn4txxsMTTQBzGLdfsU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

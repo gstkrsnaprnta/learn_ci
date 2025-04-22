@@ -66,3 +66,11 @@ jobs:
           artifacts: "build/app/outputs/flutter-apk/app-release.apk,build/app/outputs/bundle/release/app-release.aab,build/ios_build.tar.gz"
           tag: v${{ steps.project_version.outputs.version_number }}+${{ steps.project_version.outputs.build_number }}
           token: ${{ secrets.TOKEN }}
+
+      - name: Upload apk to Firebase distribution
+        uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
+        with:
+          appId: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
+          serviceCredentialsFileContent: ${{ secrets.FIREBASE_TOKEN }}
+          groups: all_testers
+          file: build/app/outputs/flutter-apk/app-release.apk
