@@ -91,11 +91,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       
-      - name: Unduh Artefak
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: build/
+      # - name: Unduh Artefak
+      #   uses: actions/download-artifact@v4
+      #   with:
+      #     name: build-artifacts
+      #     path: build/
 
       - name: Unggah APK ke Firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1.7.0
